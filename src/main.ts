@@ -133,8 +133,8 @@ export function generateFile(ctx: Context, fileDesc: FileDescriptorProto): [stri
         if (options.outputTypeRegistry) {
           staticMembers.push(code`$type: '${fullTypeName}' as const`);
         }
-
-        staticMembers.push(code`unmangledName: '${fullTypeName}' as const`);
+        const name = fullTypeName.split(".")[fullTypeName.split(".").length-1]
+        staticMembers.push(code`unmangledName: '${name}' as const`);
 
         if (options.outputEncodeMethods) {
           staticMembers.push(generateEncode(ctx, fullName, message));
