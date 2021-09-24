@@ -134,6 +134,8 @@ export function generateFile(ctx: Context, fileDesc: FileDescriptorProto): [stri
           staticMembers.push(code`$type: '${fullTypeName}' as const`);
         }
 
+        staticMembers.push(code`unmangledName: '${fullTypeName}' as const`);
+
         if (options.outputEncodeMethods) {
           staticMembers.push(generateEncode(ctx, fullName, message));
           staticMembers.push(generateDecode(ctx, fullName, message));
@@ -147,9 +149,9 @@ export function generateFile(ctx: Context, fileDesc: FileDescriptorProto): [stri
         }
 
         chunks.push(code`
-          export const ${def(fullName)} = {
+          export const ${def(fullName)} = Object.assign(function(){}, {
             ${joinCode(staticMembers, { on: ',\n\n' })}
-          };
+          });
         `);
 
         if (options.outputTypeRegistry) {
@@ -187,6 +189,7 @@ export function generateFile(ctx: Context, fileDesc: FileDescriptorProto): [stri
       chunks.push(generateGrpcJsService(ctx, fileDesc, sInfo, serviceDesc));
     } else if (options.outputServices === 'generic-definitions') {
       chunks.push(generateGenericServiceDefinition(ctx, fileDesc, sInfo, serviceDesc));
+      chunks.push(generateService(ctx, fileDesc, sInfo, serviceDesc));
     } else {
       // This service could be Twirp or grpc-web or JSON (maybe). So far all of their
       // interfaces are fairly similar so we share the same service interface.
@@ -880,7 +883,7 @@ function generateEncode(ctx: Context, fullName: string, messageDesc: DescriptorP
 function generateFromJson(ctx: Context, fullName: string, messageDesc: DescriptorProto): Code {
   const { options, utils, typeMap } = ctx;
   const chunks: Code[] = [];
-
+  
   // create the basic function declaration
   chunks.push(code`
     fromJSON(${messageDesc.field.length > 0 ? 'object' : '_'}: any): ${fullName} {

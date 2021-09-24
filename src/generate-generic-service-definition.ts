@@ -27,7 +27,7 @@ export function generateGenericServiceDefinition(
 
   // Service definition
   chunks.push(code`
-    export const ${def(`${serviceDesc.name}Definition`)} = {
+    export const ${def(`${serviceDesc.name}Definition`)}: Definition<${serviceDesc.name}> = {
   `);
 
   serviceDesc.options?.uninterpretedOption;
