@@ -49,6 +49,7 @@ export function generateGenericServiceDefinition(
   chunks.push(code`
       },
     } as const;
+    ServiceDefinitions.push(${def(`${serviceDesc.name}Definition`)})
   `);
 
   return joinCode(chunks, { on: '\n' });
