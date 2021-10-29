@@ -70,6 +70,8 @@ export function generateService(
     }
     if (options.addNestjsRestParameter) {
       params.push(code`...rest: any`);
+    } else {
+      params.push(code`context?: Context`);
     }
 
     // Return observable for interface only configuration, passing returnObservable=true and methodDesc.serverStreaming=true
