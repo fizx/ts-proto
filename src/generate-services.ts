@@ -67,11 +67,11 @@ export function generateService(
       const Metadata = imp('Metadata@@grpc/grpc-js');
       const q = options.addNestjsRestParameter ? '' : '?';
       params.push(code`metadata${q}: ${Metadata}`);
+    } else {
+      params.push(code`metadata?: Metadata`);
     }
     if (options.addNestjsRestParameter) {
       params.push(code`...rest: any`);
-    } else {
-      params.push(code`context?: Context`);
     }
 
     // Return observable for interface only configuration, passing returnObservable=true and methodDesc.serverStreaming=true
