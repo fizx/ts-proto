@@ -1,6 +1,6 @@
 {
   "name": "ts-proto-kmx",
-  "version": "1.129.1-kmx2",
+  "version": "1.129.1-kmx.2",
   "description": "",
   "main": "build/plugin.js",
   "repository": "github:stephenh/ts-proto",
